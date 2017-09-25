@@ -1,0 +1,11 @@
+{
+  "config": {
+    "sprite": {
+      "pathUrl": "img/trees-sprite.png",
+      "columns": 9,
+      "rows": 2,
+      "columnWidth": 100,
+      "rowHeight": 100
+    }
+  }
+}
