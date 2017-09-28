@@ -9,7 +9,8 @@ import { actions } from "./actions/index";
 import { configReducer } from './reducers/config';
 import { parametersReducer } from './reducers/parameters';
 import { forestReducer } from './reducers/forest';
-import ImageControl from './controls/image';
+import SpritePaintCanvasControl from './controls/spritePaintCanvas';
+import GenerationParametersControl from './controls/generationParameters';
 
 const combinedReducers = combineReducers<IState>({
   config: configReducer,
@@ -24,8 +25,9 @@ const store: Store<any> = createStore(combinedReducers, composeEnhancers(), appl
 ReactDOM.render(
   <Provider store={store}>
     <span>
-      <div>Hello, there !</div>
-      <ImageControl />
+      <GenerationParametersControl />
+      <br />
+      <SpritePaintCanvasControl />
     </span>
   </Provider>,
   document.getElementById('app')

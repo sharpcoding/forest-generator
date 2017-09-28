@@ -10,8 +10,7 @@ import { ITree } from "../state/forest/tree";
 export const parametersReducer = handleActions<IParameters, IConfig & number>({
   [actionLabels.CONFIG_LOADED_SUCCESSFULLY]: (state: IParameters, action: Action<IConfig>): IParameters => {
     return _.extend({}, state, <IParameters> {
-      spriteColumns: action.payload.sprite.columns,
-      spriteRows: action.payload.sprite.rows
+      sprite: action.payload.sprite
     })
   },
   [actionLabels.GENERATION_PARAMS_NUMBER_OF_TREES_CHANGED]: (state: IParameters, action: Action<number>): IParameters => {
@@ -20,10 +19,9 @@ export const parametersReducer = handleActions<IParameters, IConfig & number>({
     })
   }
  }, <IParameters> {
-   numberOfTrees: 150,
+   numberOfTrees: 1,
    imageHeight: 800,
    imageWidth: 800,
-   spriteColumns: 0,
-   spriteRows: 0
+   sprite: {}
   }
 );

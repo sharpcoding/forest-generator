@@ -8,11 +8,27 @@ export interface ITree {
    */
   spriteRow:  number;
   /**
-   * Tree position (x) on canvas
+   * x value of (x,y) coordinate of the tree image 
+   * left upper corner - as painted on canvas
+   * Please note tree image does not really exist 
+   * physically, as it is a fragment of the sprite
+   */
+  canvasImageX: number;
+  /**
+   * y value of (x,y) coordinate of the tree image 
+   * left upper corner as painted on canvas
+   * Please note tree image does not really exist 
+   * physically, as it is a fragment of the sprite
+   */
+  canvasImageY: number;
+  /**
+   * The most accurate x value of (x,y) coordinate 
+   * of a tree center on canvas
    */
   x: number;
   /**
-   * Tree position (y) on canvas
+   * The most accurate y value of (x,y) coordinate 
+   * of a tree center on canvas
    */
   y: number;
 }
