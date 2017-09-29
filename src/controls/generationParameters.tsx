@@ -45,7 +45,7 @@ export class GenerationParametersControl extends React.Component<IGenerationPara
     };
   }
 
-  private _validate(context: EnumValidationContext): ("success" | "error") {
+  private _validate = (context: EnumValidationContext): ("success" | "error") => {
     let result = true;
     result = result && (((context == EnumValidationContext.All) || (context == EnumValidationContext.NumberOfTrees)) ? 
       _.inRange(this.state.numberOfTrees, this.props.parameters.numberOfTreesRange[0], this.props.parameters.numberOfTreesRange[1]+1) : true);
@@ -56,9 +56,15 @@ export class GenerationParametersControl extends React.Component<IGenerationPara
     return result ? "success" : "error";
   }
 
-  private _isValid(context: EnumValidationContext): boolean {
+  private _isValid = (context: EnumValidationContext): boolean => {
     return this._validate(context) == "success";
   }
+
+  private _getTreesPerSquarePixel = ():number => {
+    let area = (this.state.canvasWidth - this.props.parameters.sprite.columnWidth) * 
+               (this.state.canvasHeight - this.props.parameters.sprite.rowHeight);
+    return this.state.numberOfTrees*1000/area;
+  } 
 
   public render() {
     return (
@@ -107,6 +113,9 @@ export class GenerationParametersControl extends React.Component<IGenerationPara
         />
         <FormControl.Feedback />
         <HelpBlock>{`Please enter a value between ${this.props.parameters.canvasWidthRange[0]} and ${this.props.parameters.canvasWidthRange[1]}`}</HelpBlock>
+      </FormGroup>
+      <FormGroup>
+        <ControlLabel>Current density {`${this._getTreesPerSquarePixel().toFixed(2)}`} trees per 1000 square pixels</ControlLabel>
       </FormGroup>
       <FormGroup>
         <Button

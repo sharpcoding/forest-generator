@@ -37724,6 +37724,24 @@ var GenerationParametersControl = /** @class */ (function (_super) {
     __extends(GenerationParametersControl, _super);
     function GenerationParametersControl(props) {
         var _this = _super.call(this, props) || this;
+        _this._validate = function (context) {
+            var result = true;
+            result = result && (((context == EnumValidationContext.All) || (context == EnumValidationContext.NumberOfTrees)) ?
+                _.inRange(_this.state.numberOfTrees, _this.props.parameters.numberOfTreesRange[0], _this.props.parameters.numberOfTreesRange[1] + 1) : true);
+            result = result && (((context == EnumValidationContext.All) || (context == EnumValidationContext.CanvasWidth)) ?
+                _.inRange(_this.state.canvasWidth, _this.props.parameters.canvasWidthRange[0], _this.props.parameters.canvasWidthRange[1] + 1) : true);
+            result = result && (((context == EnumValidationContext.All) || (context == EnumValidationContext.CanvasHeight)) ?
+                _.inRange(_this.state.canvasHeight, _this.props.parameters.canvasHeightRange[0], _this.props.parameters.canvasHeightRange[1] + 1) : true);
+            return result ? "success" : "error";
+        };
+        _this._isValid = function (context) {
+            return _this._validate(context) == "success";
+        };
+        _this._getTreesPerSquarePixel = function () {
+            var area = (_this.state.canvasWidth - _this.props.parameters.sprite.columnWidth) *
+                (_this.state.canvasHeight - _this.props.parameters.sprite.rowHeight);
+            return _this.state.numberOfTrees * 1000 / area;
+        };
         _this.state = {
             numberOfTrees: props.parameters.numberOfTrees,
             canvasWidth: props.parameters.canvasWidth,
@@ -37731,19 +37749,6 @@ var GenerationParametersControl = /** @class */ (function (_super) {
         };
         return _this;
     }
-    GenerationParametersControl.prototype._validate = function (context) {
-        var result = true;
-        result = result && (((context == EnumValidationContext.All) || (context == EnumValidationContext.NumberOfTrees)) ?
-            _.inRange(this.state.numberOfTrees, this.props.parameters.numberOfTreesRange[0], this.props.parameters.numberOfTreesRange[1] + 1) : true);
-        result = result && (((context == EnumValidationContext.All) || (context == EnumValidationContext.CanvasWidth)) ?
-            _.inRange(this.state.canvasWidth, this.props.parameters.canvasWidthRange[0], this.props.parameters.canvasWidthRange[1] + 1) : true);
-        result = result && (((context == EnumValidationContext.All) || (context == EnumValidationContext.CanvasHeight)) ?
-            _.inRange(this.state.canvasHeight, this.props.parameters.canvasHeightRange[0], this.props.parameters.canvasHeightRange[1] + 1) : true);
-        return result ? "success" : "error";
-    };
-    GenerationParametersControl.prototype._isValid = function (context) {
-        return this._validate(context) == "success";
-    };
     GenerationParametersControl.prototype.render = function () {
         var _this = this;
         return (React.createElement(react_bootstrap_1.Form, null,
@@ -37768,6 +37773,10 @@ var GenerationParametersControl = /** @class */ (function (_super) {
                         null; } }),
                 React.createElement(react_bootstrap_1.FormControl.Feedback, null),
                 React.createElement(react_bootstrap_1.HelpBlock, null, "Please enter a value between " + this.props.parameters.canvasWidthRange[0] + " and " + this.props.parameters.canvasWidthRange[1])),
+            React.createElement(react_bootstrap_1.FormGroup, null,
+                React.createElement(react_bootstrap_1.ControlLabel, null,
+                    "Current density ", "" + this._getTreesPerSquarePixel().toFixed(2),
+                    " trees per 1000 square pixels")),
             React.createElement(react_bootstrap_1.FormGroup, null,
                 React.createElement(react_bootstrap_1.Button, { disabled: !this._isValid(EnumValidationContext.All), onClick: function () { return _this.props.generateForest(_this.props.parameters); } }, "Generate Forest"))));
     };
