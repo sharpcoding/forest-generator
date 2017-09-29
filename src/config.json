@@ -2,8 +2,8 @@
   "config": {
     "sprite": {
       "pathUrl": "img/trees-sprite.png",
-      "columns": 9,
-      "rows": 2,
+      "columns": 7,
+      "rows": 5,
       "columnWidth": 100,
       "rowHeight": 100
     }

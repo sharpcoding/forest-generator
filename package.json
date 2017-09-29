@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "recompile": "webpack --config webpack.config.js",
-    "start": "webpack --config webpack.config.js && open http://localhost:8000 && ws --index.root ./src --spa ./src/index.html"
+    "start": "webpack --config webpack.config.js && open http://localhost:8000 && ws --index.root ./"
   },
   "author": "Tomasz Szatkowski",
   "license": "MIT",

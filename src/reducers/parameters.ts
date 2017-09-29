@@ -17,9 +17,9 @@ export const parametersReducer = handleActions<IParameters, IConfig & number>({
     return _.extend({}, state, <IParameters> action.payload)
   }
  }, <IParameters> {
-   numberOfTrees: 500,
-   canvasWidth: 2500,
-   canvasHeight: 250,
+   numberOfTrees: 315,
+   canvasWidth: 500,
+   canvasHeight: 500,
    dispersion: 20,
    numberOfTreesRange: [50, 5000],
    canvasWidthRange: [100, 5500],

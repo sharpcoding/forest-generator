@@ -37964,9 +37964,9 @@ exports.parametersReducer = redux_actions_1.handleActions((_a = {},
         return _.extend({}, state, action.payload);
     },
     _a), {
-    numberOfTrees: 500,
-    canvasWidth: 2500,
-    canvasHeight: 250,
+    numberOfTrees: 315,
+    canvasWidth: 500,
+    canvasHeight: 500,
     dispersion: 20,
     numberOfTreesRange: [50, 5000],
     canvasWidthRange: [100, 5500],
