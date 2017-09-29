@@ -94,8 +94,8 @@ export class SpritePaintCanvasControl extends React.Component<ISpritePaintCanvas
 
 function mapStateToProps(state: IState): ISpritePaintCanvasControlProps {
   return {
-    width: state.parameters.imageWidth,
-    height: state.parameters.imageHeight,
+    width: state.parameters.canvasWidth,
+    height: state.parameters.canvasHeight,
     sprite: state.config.sprite,
     forest: state.forest
   };

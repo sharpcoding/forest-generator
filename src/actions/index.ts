@@ -10,6 +10,9 @@ export const actions = {
   configLoadedSuccessfully: createAction<IConfig, Object>(
     actionLabels.CONFIG_LOADED_SUCCESSFULLY,
     (payload: IConfig) => payload),
+  generationParametersChanged: createAction<IParameters, IParameters>(
+    actionLabels.GENERATION_PARAMS_CHANGED,
+    (payload: IParameters) => payload),
   generateForest: createAction<IParameters, IParameters>(
     actionLabels.GENERATE_FOREST,
     (payload: IParameters) => payload)

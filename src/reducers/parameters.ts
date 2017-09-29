@@ -13,15 +13,17 @@ export const parametersReducer = handleActions<IParameters, IConfig & number>({
       sprite: action.payload.sprite
     })
   },
-  [actionLabels.GENERATION_PARAMS_NUMBER_OF_TREES_CHANGED]: (state: IParameters, action: Action<number>): IParameters => {
-    return _.extend({}, state, <IParameters> {
-      numberOfTrees: action.payload
-    })
+  [actionLabels.GENERATION_PARAMS_CHANGED]: (state: IParameters, action: Action<IParameters>): IParameters => {
+    return _.extend({}, state, <IParameters> action.payload)
   }
  }, <IParameters> {
-   numberOfTrees: 1,
-   imageHeight: 800,
-   imageWidth: 800,
+   numberOfTrees: 500,
+   canvasWidth: 2500,
+   canvasHeight: 250,
+   dispersion: 20,
+   numberOfTreesRange: [50, 5000],
+   canvasWidthRange: [100, 5500],
+   canvasHeightRange: [100, 5500],
    sprite: {}
   }
 );
