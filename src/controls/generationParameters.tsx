@@ -10,6 +10,7 @@ import { IConfig } from "../state/config/index";
 import { IParameters } from "../state/parameters/index";
 import { IState } from "../state/index";
 import { actions } from "../actions/index";
+import { auxCalculations } from "../algorithms/auxCalculations";
 
 enum EnumValidationContext {
   All,
@@ -28,8 +29,8 @@ export interface IGenerationParametersControlProps {
 
 export interface IGenerationParametersControlState {
   numberOfTrees: number;
-  canvasWidth: number;
-  canvasHeight: number;
+  imageWidth: number;
+  imageHeight: number;
 }
 
 export interface IGenerationParametersActionCreators extends ActionCreatorsMapObject {
@@ -42,31 +43,39 @@ export class GenerationParametersControl extends React.Component<IGenerationPara
     super(props);
     this.state = {
       numberOfTrees: props.parameters.numberOfTrees,
-      canvasWidth: props.parameters.imageWidth,
-      canvasHeight: props.parameters.imageHeight
+      imageWidth: props.parameters.imageWidth,
+      imageHeight: props.parameters.imageHeight
     };
   }
+
+  private _density = (): number => auxCalculations.getTreesPer1000SquarePixels(
+    this.state.imageWidth, 
+    this.state.imageHeight, 
+    this.state.numberOfTrees, 
+    this.props.config.sprite.columnWidth,
+    this.props.config.sprite.rowHeight);
+  
+  private _dispersion = (): number => auxCalculations.getDispersion(
+    this.state.imageWidth, 
+    this.state.imageHeight, 
+    this.state.numberOfTrees, 
+    this.props.config.sprite.columnWidth,
+    this.props.config.sprite.rowHeight);
 
   private _validate = (context: EnumValidationContext): ("success" | "error") => {
     let result = true;
     result = result && (((context == EnumValidationContext.All) || (context == EnumValidationContext.NumberOfTrees)) ? 
-      _.inRange(this._getTreesTimes1000PerSquarePixel(), this.props.config.image.treeDensityRange[0], this.props.config.image.treeDensityRange[1]+0.001) : true);
+      _.inRange(this._density(), this.props.config.image.treeDensityRange[0], this.props.config.image.treeDensityRange[1]+0.001) : true);
     result = result && (((context == EnumValidationContext.All) || (context == EnumValidationContext.CanvasWidth)) ? 
-      _.inRange(this.state.canvasWidth, this.props.config.image.widthRange[0], this.props.config.image.widthRange[1]+1) : true);
+      _.inRange(this.state.imageWidth, this.props.config.image.widthRange[0], this.props.config.image.widthRange[1]+1) : true);
     result = result && (((context == EnumValidationContext.All) || (context == EnumValidationContext.CanvasHeight)) ? 
-      _.inRange(this.state.canvasHeight, this.props.config.image.heightRange[0], this.props.config.image.heightRange[1]+1) : true);
+      _.inRange(this.state.imageHeight, this.props.config.image.heightRange[0], this.props.config.image.heightRange[1]+1) : true);
     return result ? "success" : "error";
   }
 
   private _isValid = (context: EnumValidationContext): boolean => {
     return this._validate(context) == "success";
   }
-
-  private _getTreesTimes1000PerSquarePixel = ():number => {
-    let area = (this.state.canvasWidth - this.props.config.sprite.columnWidth) * 
-               (this.state.canvasHeight - this.props.config.sprite.rowHeight);
-    return this.state.numberOfTrees*1000/area;
-  } 
 
   public render() {
     return (
@@ -79,43 +88,56 @@ export class GenerationParametersControl extends React.Component<IGenerationPara
             value={this.state.numberOfTrees}
             onChange={(event) => this.setState({ numberOfTrees: event.currentTarget.valueAsNumber })}
             onBlur={(event) => this._isValid(EnumValidationContext.NumberOfTrees) ? 
-              this.props.generationParametersChanged(_.extend({}, this.props.parameters, { numberOfTrees: this.state.numberOfTrees})) :
+              this.props.generationParametersChanged(_.extend<IParameters, Object, IParameters>({}, this.props.parameters, 
+                {
+                  numberOfTrees: this.state.numberOfTrees,
+                  dispersion: this._dispersion() 
+                })) :
               null 
             }
           />
         <FormControl.Feedback />
-        <HelpBlock>{`Please enter a value so that the tree density is from ${this.props.config.image.treeDensityRange[0]} to ${this.props.config.image.treeDensityRange[1]}`}</HelpBlock>
-        <ControlLabel>Current density is {`${this._getTreesTimes1000PerSquarePixel().toFixed(2)}`} trees per 1000 square pixels</ControlLabel>
+        <HelpBlock>Please enter a value so that the tree density is from {this.props.config.image.treeDensityRange[0]} to {this.props.config.image.treeDensityRange[1]}</HelpBlock>
+        <ControlLabel>
+          Current density is {this._density().toFixed(2)} trees per 1000 square pixels.
+          Current recommended dispersion is {this._dispersion().toFixed(2)} pixels.
+        </ControlLabel>
       </FormGroup>
       <FormGroup validationState={this._validate(EnumValidationContext.CanvasWidth)}>
         <ControlLabel>Canvas width (px)</ControlLabel>
         <input
           className="form-control"
           type="number"
-          value={this.state.canvasWidth}
-          onChange={(event) => this.setState({ canvasWidth: event.currentTarget.valueAsNumber })}
+          value={this.state.imageWidth}
+          onChange={(event) => this.setState({ imageWidth: event.currentTarget.valueAsNumber })}
           onBlur={(event) => this._isValid(EnumValidationContext.CanvasWidth) ? 
-            this.props.generationParametersChanged(_.extend({}, this.props.parameters, { canvasWidth: this.state.canvasWidth})) :
+            this.props.generationParametersChanged(_.extend<IParameters, Object, IParameters>({}, this.props.parameters, { 
+              imageWidth: this.state.imageWidth,
+              dispersion: this._dispersion()})) :
             null 
           }
         />
         <FormControl.Feedback />
-        <HelpBlock>{`Please enter a value between ${this.props.config.image.widthRange[0]} and ${this.props.config.image.widthRange[1]}`}</HelpBlock>
+        <HelpBlock>Please enter a value between {this.props.config.image.widthRange[0]} and {this.props.config.image.widthRange[1]}</HelpBlock>
       </FormGroup>
       <FormGroup validationState={this._validate(EnumValidationContext.CanvasHeight)}>
         <ControlLabel>Canvas height (px)</ControlLabel>
         <input
           className="form-control"
           type="number"
-          value={this.state.canvasHeight}
-          onChange={(event) => this.setState({ canvasHeight: event.currentTarget.valueAsNumber })}
+          value={this.state.imageHeight}
+          onChange={(event) => this.setState({ imageHeight: event.currentTarget.valueAsNumber })}
           onBlur={(event) => this._isValid(EnumValidationContext.CanvasHeight) ? 
-            this.props.generationParametersChanged(_.extend({}, this.props.parameters, { canvasHeight: this.state.canvasHeight })) :
+            this.props.generationParametersChanged(_.extend<IParameters, Object, IParameters>({}, this.props.parameters,
+              {
+                dispersion: this._dispersion(),
+                imageHeight: this.state.imageHeight,
+              })) :
             null 
           }
         />
         <FormControl.Feedback />
-        <HelpBlock>{`Please enter a value between ${this.props.config.image.heightRange[0]} and ${this.props.config.image.heightRange[1]}`}</HelpBlock>
+        <HelpBlock>Please enter a value between {this.props.config.image.heightRange[0]} and {this.props.config.image.heightRange[1]}</HelpBlock>
       </FormGroup>
       <FormGroup>
         <Button
