@@ -18,12 +18,9 @@ export const parametersReducer = handleActions<IParameters, IConfig & number>({
   }
  }, <IParameters> {
    numberOfTrees: 315,
-   canvasWidth: 500,
-   canvasHeight: 500,
+   imageWidth: 500,
+   imageHeight: 500,
    dispersion: 20,
-   numberOfTreesRange: [50, 5000],
-   canvasWidthRange: [100, 5500],
-   canvasHeightRange: [100, 5500],
    sprite: {}
   }
 );

@@ -10,7 +10,8 @@ export const asyncActionTriggers = {
     axios
       .get(configUrl)
       .then((result: AxiosResponse) => {
-        dispatch(actions.configLoadedSuccessfully(<IConfig> result.data.config));
+        // Below there is a risky operation, to be improved by response checking 
+        dispatch(actions.configLoadedSuccessfully(<IConfig> result.data));
       });
   }
 }

@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 import * as _ from 'lodash';
 import { connect } from "react-redux";
 import { IState } from "../state/index";
-import { ISprite } from "../state/config/sprite/index";
+import { ISprite } from "../state/config/sprite";
 import { Dispatch } from "redux";
 import { bindActionCreators } from "redux";
 import { ActionCreatorsMapObject } from "redux";
@@ -94,8 +94,8 @@ export class SpritePaintCanvasControl extends React.Component<ISpritePaintCanvas
 
 function mapStateToProps(state: IState): ISpritePaintCanvasControlProps {
   return {
-    width: state.parameters.canvasWidth,
-    height: state.parameters.canvasHeight,
+    width: state.parameters.imageWidth,
+    height: state.parameters.imageHeight,
     sprite: state.config.sprite,
     forest: state.forest
   };

@@ -20,8 +20,8 @@ export const forestReducer = handleActions<IForest, IParameters>({
       let treePositionMeetsDispersionLimit = false;
       while (!treePositionMeetsDispersionLimit) {
         tree = _.extend(tree, <ITree> {
-          canvasImageX: _.random(0, action.payload.canvasWidth - action.payload.sprite.columnWidth),
-          canvasImageY: _.random(0, action.payload.canvasHeight - action.payload.sprite.rowHeight)
+          canvasImageX: _.random(0, action.payload.imageWidth - action.payload.sprite.columnWidth),
+          canvasImageY: _.random(0, action.payload.imageHeight - action.payload.sprite.rowHeight)
         })
         treePositionMeetsDispersionLimit = _.isEmpty(_.filter(trees, t => {
           let distance = Math.sqrt(

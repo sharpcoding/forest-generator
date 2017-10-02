@@ -1,11 +1,14 @@
 {
-  "config": {
-    "sprite": {
-      "pathUrl": "img/trees-sprite.png",
-      "columns": 7,
-      "rows": 5,
-      "columnWidth": 100,
-      "rowHeight": 100
-    }
+  "sprite": {
+    "pathUrl": "img/trees-sprite.png",
+    "columns": 7,
+    "rows": 5,
+    "columnWidth": 100,
+    "rowHeight": 100
+  },
+  "image": {
+    "widthRange": [100, 5000],
+    "heightRange": [100, 5000],
+    "treeDensityRange": [0.8, 3]
   }
 }
