@@ -37715,7 +37715,6 @@ var redux_1 = __webpack_require__(73);
 var react_bootstrap_1 = __webpack_require__(464);
 var index_1 = __webpack_require__(254);
 var auxCalculations_1 = __webpack_require__(579);
-// import { auxCalculations } from "../";
 var EnumValidationContext;
 (function (EnumValidationContext) {
     EnumValidationContext[EnumValidationContext["All"] = 0] = "All";
@@ -37727,8 +37726,10 @@ var GenerationParametersControl = /** @class */ (function (_super) {
     __extends(GenerationParametersControl, _super);
     function GenerationParametersControl(props) {
         var _this = _super.call(this, props) || this;
-        _this._density = function () { return auxCalculations_1.auxCalculations.getTreesPer1000SquarePixels(_this.state.imageWidth, _this.state.imageHeight, _this.state.numberOfTrees, _this.props.config.sprite.columnWidth, _this.props.config.sprite.rowHeight); };
-        _this._dispersion = function () { return auxCalculations_1.auxCalculations.getDispersion(_this.state.imageWidth, _this.state.imageHeight, _this.state.numberOfTrees, _this.props.config.sprite.columnWidth, _this.props.config.sprite.rowHeight); };
+        _this._area = function () { return auxCalculations_1.auxCalculations.getArea(_this.state.imageWidth, _this.state.imageHeight, _this.props.config.sprite.columnWidth, _this.props.config.sprite.rowHeight); };
+        _this._density = function () { return auxCalculations_1.auxCalculations.getTreesDensity(_this._area(), _this.state.numberOfTrees); };
+        _this._dispersion = function () { return auxCalculations_1.auxCalculations.getDispersion(_this._area(), _this.state.numberOfTrees); };
+        _this._recommendedNumberOfTrees = function () { return auxCalculations_1.auxCalculations.getRecommendedNumberOfTress(_this.state.numberOfTrees, _this._area(), _this.props.config.image.treeDensityRange); };
         _this._validate = function (context) {
             var result = true;
             result = result && (((context == EnumValidationContext.All) || (context == EnumValidationContext.NumberOfTrees)) ?
@@ -37754,12 +37755,13 @@ var GenerationParametersControl = /** @class */ (function (_super) {
         return (React.createElement(react_bootstrap_1.Form, null,
             React.createElement(react_bootstrap_1.FormGroup, { validationState: this._validate(EnumValidationContext.NumberOfTrees) },
                 React.createElement(react_bootstrap_1.ControlLabel, null, "Number of trees"),
-                React.createElement("input", { className: "form-control", type: "number", value: this.state.numberOfTrees, onChange: function (event) { return _this.setState({ numberOfTrees: event.currentTarget.valueAsNumber }); }, onBlur: function (event) { return _this._isValid(EnumValidationContext.NumberOfTrees) ?
-                        _this.props.generationParametersChanged(_.extend({}, _this.props.parameters, {
-                            numberOfTrees: _this.state.numberOfTrees,
-                            dispersion: _this._dispersion()
-                        })) :
-                        null; } }),
+                React.createElement("input", { className: "form-control", type: "number", value: this.state.numberOfTrees, onChange: function (event) { return _this.setState({ numberOfTrees: event.currentTarget.valueAsNumber }); }, onBlur: function (event) {
+                        _this._isValid(EnumValidationContext.NumberOfTrees) ?
+                            _this.props.generationParametersChanged(_.extend({}, _this.props.parameters, {
+                                numberOfTrees: _this.state.numberOfTrees,
+                                dispersion: _this._dispersion()
+                            })) : null;
+                    } }),
                 React.createElement(react_bootstrap_1.FormControl.Feedback, null),
                 React.createElement(react_bootstrap_1.HelpBlock, null,
                     "Please enter a value so that the tree density is from ",
@@ -37774,12 +37776,22 @@ var GenerationParametersControl = /** @class */ (function (_super) {
                     " pixels.")),
             React.createElement(react_bootstrap_1.FormGroup, { validationState: this._validate(EnumValidationContext.CanvasWidth) },
                 React.createElement(react_bootstrap_1.ControlLabel, null, "Canvas width (px)"),
-                React.createElement("input", { className: "form-control", type: "number", value: this.state.imageWidth, onChange: function (event) { return _this.setState({ imageWidth: event.currentTarget.valueAsNumber }); }, onBlur: function (event) { return _this._isValid(EnumValidationContext.CanvasWidth) ?
-                        _this.props.generationParametersChanged(_.extend({}, _this.props.parameters, {
-                            imageWidth: _this.state.imageWidth,
-                            dispersion: _this._dispersion()
-                        })) :
-                        null; } }),
+                React.createElement("input", { className: "form-control", type: "number", value: this.state.imageWidth, onChange: function (event) {
+                        _this.setState(_.extend({}, {
+                            imageWidth: event.currentTarget.valueAsNumber
+                        }), function () {
+                            _this.setState(_.extend({}, {
+                                numberOfTrees: _this._recommendedNumberOfTrees()
+                            }));
+                        });
+                    }, onBlur: function (event) {
+                        _this._isValid(EnumValidationContext.CanvasWidth) ?
+                            _this.props.generationParametersChanged(_.extend({}, _this.props.parameters, {
+                                imageWidth: _this.state.imageWidth,
+                                numberOfTrees: _this.state.numberOfTrees,
+                                dispersion: _this._dispersion()
+                            })) : null;
+                    } }),
                 React.createElement(react_bootstrap_1.FormControl.Feedback, null),
                 React.createElement(react_bootstrap_1.HelpBlock, null,
                     "Please enter a value between ",
@@ -37788,12 +37800,22 @@ var GenerationParametersControl = /** @class */ (function (_super) {
                     this.props.config.image.widthRange[1])),
             React.createElement(react_bootstrap_1.FormGroup, { validationState: this._validate(EnumValidationContext.CanvasHeight) },
                 React.createElement(react_bootstrap_1.ControlLabel, null, "Canvas height (px)"),
-                React.createElement("input", { className: "form-control", type: "number", value: this.state.imageHeight, onChange: function (event) { return _this.setState({ imageHeight: event.currentTarget.valueAsNumber }); }, onBlur: function (event) { return _this._isValid(EnumValidationContext.CanvasHeight) ?
-                        _this.props.generationParametersChanged(_.extend({}, _this.props.parameters, {
-                            dispersion: _this._dispersion(),
-                            imageHeight: _this.state.imageHeight,
-                        })) :
-                        null; } }),
+                React.createElement("input", { className: "form-control", type: "number", value: this.state.imageHeight, onChange: function (event) {
+                        _this.setState(_.extend({}, {
+                            imageHeight: event.currentTarget.valueAsNumber
+                        }), function () {
+                            _this.setState(_.extend({}, {
+                                numberOfTrees: _this._recommendedNumberOfTrees()
+                            }));
+                        });
+                    }, onBlur: function (event) {
+                        _this._isValid(EnumValidationContext.CanvasHeight) ?
+                            _this.props.generationParametersChanged(_.extend({}, _this.props.parameters, {
+                                dispersion: _this._dispersion(),
+                                numberOfTrees: _this.state.numberOfTrees,
+                                imageHeight: _this.state.imageHeight,
+                            })) : null;
+                    } }),
                 React.createElement(react_bootstrap_1.FormControl.Feedback, null),
                 React.createElement(react_bootstrap_1.HelpBlock, null,
                     "Please enter a value between ",
@@ -64627,10 +64649,24 @@ var _ = __webpack_require__(53);
  */
 var AuxCalculations = /** @class */ (function () {
     function AuxCalculations() {
-        this.getTreesPer1000SquarePixels = function (canvasWidth, canvasHeight, numberOfTrees, spriteColumnWidth, spriteRowHeight) {
-            var area = (canvasWidth - spriteColumnWidth) *
+        var _this = this;
+        this.getArea = function (canvasWidth, canvasHeight, spriteColumnWidth, spriteRowHeight) {
+            return (canvasWidth - spriteColumnWidth) *
                 (canvasHeight - spriteRowHeight);
+        };
+        /**
+         * Get density understood as number of trees (represented in 1k units)
+         * per area (represented in pixels^2 units)
+         */
+        this.getTreesDensity = function (area, numberOfTrees) {
             return numberOfTrees * 1000 / area;
+        };
+        this.getRecommendedNumberOfTress = function (currentNumberOfTrees, area, treeDensityRange) {
+            var currentDensity = _this.getTreesDensity(area, currentNumberOfTrees);
+            if (_.inRange(currentDensity, treeDensityRange[0], treeDensityRange[1]))
+                return currentNumberOfTrees;
+            var recalculatedDensity = currentDensity < treeDensityRange[0] ? treeDensityRange[0] : treeDensityRange[1];
+            return _.floor((recalculatedDensity * area) / 1000);
         };
         /**
          * Provided trees were planted uniformly in a square grid,
@@ -64639,9 +64675,7 @@ var AuxCalculations = /** @class */ (function () {
          * Used for calculating the minimal distance (in pixels) between a three
          * and an another, the most proxime tree
          */
-        this.getDispersion = function (canvasWidth, canvasHeight, numberOfTrees, spriteColumnWidth, spriteRowHeight) {
-            var area = (canvasWidth - spriteColumnWidth) *
-                (canvasHeight - spriteRowHeight);
+        this.getDispersion = function (area, numberOfTrees) {
             var dispersion = Math.sqrt(area / numberOfTrees);
             return _.max([1, dispersion]);
         };

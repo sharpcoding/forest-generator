@@ -28,9 +28,9 @@ export interface IGenerationParametersControlProps {
 }
 
 export interface IGenerationParametersControlState {
-  numberOfTrees: number;
-  imageWidth: number;
-  imageHeight: number;
+  numberOfTrees?: number;
+  imageWidth?: number;
+  imageHeight?: number;
 }
 
 export interface IGenerationParametersActionCreators extends ActionCreatorsMapObject {
@@ -48,19 +48,17 @@ export class GenerationParametersControl extends React.Component<IGenerationPara
     };
   }
 
-  private _density = (): number => auxCalculations.getTreesPer1000SquarePixels(
+  private _area = (): number => auxCalculations.getArea(
     this.state.imageWidth, 
     this.state.imageHeight, 
-    this.state.numberOfTrees, 
     this.props.config.sprite.columnWidth,
     this.props.config.sprite.rowHeight);
-  
-  private _dispersion = (): number => auxCalculations.getDispersion(
-    this.state.imageWidth, 
-    this.state.imageHeight, 
+  private _density = (): number => auxCalculations.getTreesDensity(this._area(), this.state.numberOfTrees);
+  private _dispersion = (): number => auxCalculations.getDispersion(this._area(), this.state.numberOfTrees);
+  private _recommendedNumberOfTrees = (): number => auxCalculations.getRecommendedNumberOfTress(
     this.state.numberOfTrees, 
-    this.props.config.sprite.columnWidth,
-    this.props.config.sprite.rowHeight);
+    this._area(), 
+    this.props.config.image.treeDensityRange)
 
   private _validate = (context: EnumValidationContext): ("success" | "error") => {
     let result = true;
@@ -87,13 +85,13 @@ export class GenerationParametersControl extends React.Component<IGenerationPara
             type="number"
             value={this.state.numberOfTrees}
             onChange={(event) => this.setState({ numberOfTrees: event.currentTarget.valueAsNumber })}
-            onBlur={(event) => this._isValid(EnumValidationContext.NumberOfTrees) ? 
-              this.props.generationParametersChanged(_.extend<IParameters, Object, IParameters>({}, this.props.parameters, 
-                {
-                  numberOfTrees: this.state.numberOfTrees,
-                  dispersion: this._dispersion() 
-                })) :
-              null 
+            onBlur={(event) => {
+              this._isValid(EnumValidationContext.NumberOfTrees) ? 
+                this.props.generationParametersChanged(_.extend<IParameters, Object, IParameters>({}, this.props.parameters, {
+                    numberOfTrees: this.state.numberOfTrees,
+                    dispersion: this._dispersion() 
+                  })) : null 
+              }
             }
           />
         <FormControl.Feedback />
@@ -109,12 +107,21 @@ export class GenerationParametersControl extends React.Component<IGenerationPara
           className="form-control"
           type="number"
           value={this.state.imageWidth}
-          onChange={(event) => this.setState({ imageWidth: event.currentTarget.valueAsNumber })}
-          onBlur={(event) => this._isValid(EnumValidationContext.CanvasWidth) ? 
-            this.props.generationParametersChanged(_.extend<IParameters, Object, IParameters>({}, this.props.parameters, { 
-              imageWidth: this.state.imageWidth,
-              dispersion: this._dispersion()})) :
-            null 
+          onChange={(event) => { 
+            this.setState(_.extend<IGenerationParametersControlState, IGenerationParametersControlState>({}, {
+              imageWidth: event.currentTarget.valueAsNumber }), () => {
+              this.setState(_.extend<IGenerationParametersControlState, IGenerationParametersControlState>({}, {
+                numberOfTrees: this._recommendedNumberOfTrees()
+              }));
+            });
+          }}
+          onBlur={(event) => { 
+            this._isValid(EnumValidationContext.CanvasWidth) ? 
+              this.props.generationParametersChanged(_.extend<IParameters, Object, IParameters>({}, this.props.parameters, { 
+                imageWidth: this.state.imageWidth,
+                numberOfTrees: this.state.numberOfTrees,
+                dispersion: this._dispersion()})) : null 
+            }
           }
         />
         <FormControl.Feedback />
@@ -126,14 +133,22 @@ export class GenerationParametersControl extends React.Component<IGenerationPara
           className="form-control"
           type="number"
           value={this.state.imageHeight}
-          onChange={(event) => this.setState({ imageHeight: event.currentTarget.valueAsNumber })}
-          onBlur={(event) => this._isValid(EnumValidationContext.CanvasHeight) ? 
-            this.props.generationParametersChanged(_.extend<IParameters, Object, IParameters>({}, this.props.parameters,
-              {
-                dispersion: this._dispersion(),
-                imageHeight: this.state.imageHeight,
-              })) :
-            null 
+          onChange={(event) => { 
+            this.setState(_.extend<IGenerationParametersControlState, IGenerationParametersControlState>({}, {
+              imageHeight: event.currentTarget.valueAsNumber }), () => {
+              this.setState(_.extend<IGenerationParametersControlState, IGenerationParametersControlState>({}, {
+                numberOfTrees: this._recommendedNumberOfTrees()
+              }));
+            });
+          }}
+          onBlur={(event) => {
+            this._isValid(EnumValidationContext.CanvasHeight) ? 
+              this.props.generationParametersChanged(_.extend<IParameters, Object, IParameters>({}, this.props.parameters, {
+                  dispersion: this._dispersion(),
+                  numberOfTrees: this.state.numberOfTrees,
+                  imageHeight: this.state.imageHeight,
+                })) : null
+            } 
           }
         />
         <FormControl.Feedback />
