@@ -9,7 +9,7 @@ import { bindActionCreators } from "redux";
 import { ActionCreatorsMapObject } from "redux";
 import { IForest } from "../state/forest/index";
 import { ITree } from "../state/forest/tree";
-import { IParameters } from "../state/parameters/index";
+import { IGenerationParameters } from "../state/generationParameters";
 import { actions } from "../actions/index";
 
 export interface ISpritePaintCanvasControlOwnProps {
@@ -94,8 +94,8 @@ export class SpritePaintCanvasControl extends React.Component<ISpritePaintCanvas
 
 function mapStateToProps(state: IState): ISpritePaintCanvasControlProps {
   return {
-    width: state.parameters.imageWidth,
-    height: state.parameters.imageHeight,
+    width: state.generationParameters.imageWidth,
+    height: state.generationParameters.imageHeight,
     sprite: state.config.sprite,
     forest: state.forest
   };

@@ -7,7 +7,7 @@ import { bindActionCreators } from "redux";
 import { ButtonToolbar, Button, ControlLabel, Form, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
 import { ActionCreatorsMapObject } from "redux";
 import { IConfig } from "../state/config/index";
-import { IParameters } from "../state/parameters/index";
+import { IGenerationParameters } from "../state/generationParameters";
 import { IState } from "../state/index";
 import { actions } from "../actions/index";
 import { auxCalculations } from "../algorithms/auxCalculations";
@@ -24,7 +24,7 @@ export interface IGenerationParametersControlOwnProps {
 
 export interface IGenerationParametersControlProps {
   config: IConfig;
-  parameters: IParameters;
+  parameters: IGenerationParameters;
 }
 
 export interface IGenerationParametersControlState {
@@ -34,8 +34,8 @@ export interface IGenerationParametersControlState {
 }
 
 export interface IGenerationParametersActionCreators extends ActionCreatorsMapObject {
-  generateForest: (value: IParameters) => void;
-  generationParametersChanged: (value: IParameters) => void;
+  generateForest: (value: IGenerationParameters) => void;
+  generationParametersChanged: (value: IGenerationParameters) => void;
 }
 
 export class GenerationParametersControl extends React.Component<IGenerationParametersControlProps & IGenerationParametersActionCreators, IGenerationParametersControlState> {
@@ -87,7 +87,7 @@ export class GenerationParametersControl extends React.Component<IGenerationPara
             onChange={(event) => this.setState({ numberOfTrees: event.currentTarget.valueAsNumber })}
             onBlur={(event) => {
               this._isValid(EnumValidationContext.NumberOfTrees) ? 
-                this.props.generationParametersChanged(_.extend<IParameters, Object, IParameters>({}, this.props.parameters, {
+                this.props.generationParametersChanged(_.extend<IGenerationParameters, Object, IGenerationParameters>({}, this.props.parameters, {
                     numberOfTrees: this.state.numberOfTrees,
                     dispersion: this._dispersion() 
                   })) : null 
@@ -117,7 +117,7 @@ export class GenerationParametersControl extends React.Component<IGenerationPara
           }}
           onBlur={(event) => { 
             this._isValid(EnumValidationContext.CanvasWidth) ? 
-              this.props.generationParametersChanged(_.extend<IParameters, Object, IParameters>({}, this.props.parameters, { 
+              this.props.generationParametersChanged(_.extend<IGenerationParameters, Object, IGenerationParameters>({}, this.props.parameters, { 
                 imageWidth: this.state.imageWidth,
                 numberOfTrees: this.state.numberOfTrees,
                 dispersion: this._dispersion()})) : null 
@@ -143,7 +143,7 @@ export class GenerationParametersControl extends React.Component<IGenerationPara
           }}
           onBlur={(event) => {
             this._isValid(EnumValidationContext.CanvasHeight) ? 
-              this.props.generationParametersChanged(_.extend<IParameters, Object, IParameters>({}, this.props.parameters, {
+              this.props.generationParametersChanged(_.extend<IGenerationParameters, Object, IGenerationParameters>({}, this.props.parameters, {
                   dispersion: this._dispersion(),
                   numberOfTrees: this.state.numberOfTrees,
                   imageHeight: this.state.imageHeight,
@@ -166,7 +166,7 @@ export class GenerationParametersControl extends React.Component<IGenerationPara
 function mapStateToProps(state: IState): IGenerationParametersControlProps {
   return {
     config: state.config,
-    parameters: state.parameters
+    parameters: state.generationParameters
   };
 }
 

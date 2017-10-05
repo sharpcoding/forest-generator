@@ -3,7 +3,7 @@
  */
 import { ISprite } from "../config/sprite";
 
-export interface IParameters {
+export interface IGenerationParameters {
   readonly numberOfTrees?: number;
   readonly imageWidth?: number;
   readonly imageHeight?: number;

@@ -1,5 +1,5 @@
 import { IConfig } from "./config";
-import { IParameters } from "./parameters";
+import { IGenerationParameters } from "./generationParameters";
 import { IForest } from "./forest";
 
 /**
@@ -7,6 +7,6 @@ import { IForest } from "./forest";
  */
 export interface IState {
   readonly config: IConfig;
-  readonly parameters: IParameters;
+  readonly generationParameters: IGenerationParameters;
   readonly forest: IForest;
 }

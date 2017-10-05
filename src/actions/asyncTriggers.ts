@@ -3,7 +3,7 @@ import { Dispatch } from "redux";
 import { IState } from "../state/index";
 import { actions } from "./index";
 import { IConfig } from "../state/config/index";
-import { IParameters } from "../state/parameters/index";
+import { IGenerationParameters } from "../state/generationParameters";
 
 export const asyncActionTriggers = {
   loadConfig: (configUrl: string) => (dispatch) => {

@@ -4,16 +4,16 @@ import { actionLabels } from "./labels";
 import { IConfig } from "../state/config";
 import { ISprite } from "../state/config/sprite";
 import { IForest } from "../state/forest";
-import { IParameters } from "../state/parameters";
+import { IGenerationParameters } from "../state/generationParameters";
 
 export const actions = {
   configLoadedSuccessfully: createAction<IConfig, Object>(
     actionLabels.CONFIG_LOADED_SUCCESSFULLY,
     (payload: IConfig) => payload),
-  generationParametersChanged: createAction<IParameters, IParameters>(
+  generationParametersChanged: createAction<IGenerationParameters, IGenerationParameters>(
     actionLabels.GENERATION_PARAMS_CHANGED,
-    (payload: IParameters) => payload),
-  generateForest: createAction<IParameters, IParameters>(
+    (payload: IGenerationParameters) => payload),
+  generateForest: createAction<IGenerationParameters, IGenerationParameters>(
     actionLabels.GENERATE_FOREST,
-    (payload: IParameters) => payload)
+    (payload: IGenerationParameters) => payload)
 }

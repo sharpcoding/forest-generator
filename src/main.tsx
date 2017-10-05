@@ -7,14 +7,14 @@ import { IState } from './state';
 import { asyncActionTriggers } from "./actions/asyncTriggers";
 import { actions } from "./actions/index";
 import { configReducer } from './reducers/config';
-import { parametersReducer } from './reducers/parameters';
+import { generationParametersReducer } from './reducers/generationParameters';
 import { forestReducer } from './reducers/forest';
 import SpritePaintCanvasControl from './controls/spritePaintCanvas';
 import GenerationParametersControl from './controls/generationParameters';
 
 const combinedReducers = combineReducers<IState>({
   config: configReducer,
-  parameters: parametersReducer,
+  generationParameters: generationParametersReducer,
   forest: forestReducer
 });
 
