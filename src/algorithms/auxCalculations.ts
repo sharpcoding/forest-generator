@@ -9,8 +9,8 @@ class AuxCalculations {
                     spriteColumnWidth: number,  
                     spriteRowHeight: number):number =>  
   {
-    return (canvasWidth - spriteColumnWidth) * 
-           (canvasHeight - spriteRowHeight);
+    return (_.max([canvasWidth, spriteColumnWidth]) - spriteColumnWidth) * 
+           (_.max([canvasHeight, spriteRowHeight]) - spriteRowHeight);
   }
 
   /**
@@ -19,7 +19,7 @@ class AuxCalculations {
    */
   public getTreesDensity = (area: number, numberOfTrees: number):number =>  
   {
-    return numberOfTrees*1000/area;
+    return area > 0 ? numberOfTrees*1000/area : 0;
   }
 
   public getRecommendedNumberOfTress = (currentNumberOfTrees: number, area: number, treeDensityRange: [number, number]): number => 

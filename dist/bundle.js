@@ -37769,9 +37769,9 @@ var GenerationParametersControl = /** @class */ (function (_super) {
                     " to ",
                     this.props.config.image.treeDensityRange[1]),
                 React.createElement(react_bootstrap_1.ControlLabel, null,
-                    "Current density is ",
+                    "Presented density is ",
                     this._density().toFixed(2),
-                    " trees per 1000 square pixels. Current recommended dispersion is ",
+                    " tree per square pixel x 1000. Current recommended dispersion is ",
                     this._dispersion().toFixed(2),
                     " pixels.")),
             React.createElement(react_bootstrap_1.FormGroup, { validationState: this._validate(EnumValidationContext.CanvasWidth) },
@@ -64651,15 +64651,15 @@ var AuxCalculations = /** @class */ (function () {
     function AuxCalculations() {
         var _this = this;
         this.getArea = function (canvasWidth, canvasHeight, spriteColumnWidth, spriteRowHeight) {
-            return (canvasWidth - spriteColumnWidth) *
-                (canvasHeight - spriteRowHeight);
+            return (_.max([canvasWidth, spriteColumnWidth]) - spriteColumnWidth) *
+                (_.max([canvasHeight, spriteRowHeight]) - spriteRowHeight);
         };
         /**
          * Get density understood as number of trees (represented in 1k units)
          * per area (represented in pixels^2 units)
          */
         this.getTreesDensity = function (area, numberOfTrees) {
-            return numberOfTrees * 1000 / area;
+            return area > 0 ? numberOfTrees * 1000 / area : 0;
         };
         this.getRecommendedNumberOfTress = function (currentNumberOfTrees, area, treeDensityRange) {
             var currentDensity = _this.getTreesDensity(area, currentNumberOfTrees);

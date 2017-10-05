@@ -97,7 +97,7 @@ export class GenerationParametersControl extends React.Component<IGenerationPara
         <FormControl.Feedback />
         <HelpBlock>Please enter a value so that the tree density is from {this.props.config.image.treeDensityRange[0]} to {this.props.config.image.treeDensityRange[1]}</HelpBlock>
         <ControlLabel>
-          Current density is {this._density().toFixed(2)} trees per 1000 square pixels.
+          Presented density is {this._density().toFixed(2)} tree per square pixel x 1000.
           Current recommended dispersion is {this._dispersion().toFixed(2)} pixels.
         </ControlLabel>
       </FormGroup>
