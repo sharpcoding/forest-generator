@@ -4,6 +4,16 @@ import * as _ from "lodash";
  * Class aggregating minor/auxiliary calculations
  */
 class AuxCalculations {
+  /**
+   * Wrapper around lodash _.inRange()
+   * Differences:
+   * 1) accepts an array of numbers as the range
+   * 2) upper range value is checked inclusive
+   */
+  public inRange = (value: number, range: [number, number]): boolean => {
+    return value == range[1] || _.inRange(value, range[0], range[1]);
+  }
+
   public getArea = (canvasWidth: number,
                     canvasHeight: number,
                     spriteColumnWidth: number,  
@@ -25,10 +35,11 @@ class AuxCalculations {
   public getRecommendedNumberOfTress = (currentNumberOfTrees: number, area: number, treeDensityRange: [number, number]): number => 
   {
     let currentDensity = this.getTreesDensity(area, currentNumberOfTrees);
-    if (_.inRange(currentDensity, treeDensityRange[0], treeDensityRange[1]))
+    if (auxCalculations.inRange(currentDensity, treeDensityRange))
       return currentNumberOfTrees;
-    let recalculatedDensity = currentDensity < treeDensityRange[0] ? treeDensityRange[0] : treeDensityRange[1];
-    return _.floor((recalculatedDensity * area) / 1000);
+    return currentDensity < treeDensityRange[0] ? 
+      _.ceil(treeDensityRange[0] * area / 1000) :
+      _.floor(treeDensityRange[1] * area / 1000)
   }
 
   /**

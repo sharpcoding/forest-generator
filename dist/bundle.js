@@ -37730,14 +37730,25 @@ var GenerationParametersControl = /** @class */ (function (_super) {
         _this._density = function () { return auxCalculations_1.auxCalculations.getTreesDensity(_this._area(), _this.state.numberOfTrees); };
         _this._dispersion = function () { return auxCalculations_1.auxCalculations.getDispersion(_this._area(), _this.state.numberOfTrees); };
         _this._recommendedNumberOfTrees = function () { return auxCalculations_1.auxCalculations.getRecommendedNumberOfTress(_this.state.numberOfTrees, _this._area(), _this.props.config.image.treeDensityRange); };
+        _this._formatDensity = function () {
+            var densityRounded = _.floor(_this._density() * 100) / 100;
+            var result = "" + densityRounded;
+            if (!auxCalculations_1.auxCalculations.inRange(_this._density(), _this.props.config.image.treeDensityRange) &&
+                auxCalculations_1.auxCalculations.inRange(densityRounded, _this.props.config.image.treeDensityRange)) {
+                result = _this._density() < _this.props.config.image.treeDensityRange[0] ?
+                    "slightly below " + _this.props.config.image.treeDensityRange[0] :
+                    "slightly above " + _this.props.config.image.treeDensityRange[1];
+            }
+            return result;
+        };
         _this._validate = function (context) {
             var result = true;
             result = result && (((context == EnumValidationContext.All) || (context == EnumValidationContext.NumberOfTrees)) ?
-                _.inRange(_this._density(), _this.props.config.image.treeDensityRange[0], _this.props.config.image.treeDensityRange[1] + 0.001) : true);
+                auxCalculations_1.auxCalculations.inRange(_this._density(), _this.props.config.image.treeDensityRange) : true);
             result = result && (((context == EnumValidationContext.All) || (context == EnumValidationContext.CanvasWidth)) ?
-                _.inRange(_this.state.imageWidth, _this.props.config.image.widthRange[0], _this.props.config.image.widthRange[1] + 1) : true);
+                auxCalculations_1.auxCalculations.inRange(_this.state.imageWidth, _this.props.config.image.widthRange) : true);
             result = result && (((context == EnumValidationContext.All) || (context == EnumValidationContext.CanvasHeight)) ?
-                _.inRange(_this.state.imageHeight, _this.props.config.image.heightRange[0], _this.props.config.image.heightRange[1] + 1) : true);
+                auxCalculations_1.auxCalculations.inRange(_this.state.imageHeight, _this.props.config.image.heightRange) : true);
             return result ? "success" : "error";
         };
         _this._isValid = function (context) {
@@ -37770,8 +37781,8 @@ var GenerationParametersControl = /** @class */ (function (_super) {
                     this.props.config.image.treeDensityRange[1]),
                 React.createElement(react_bootstrap_1.ControlLabel, null,
                     "Presented density is ",
-                    this._density().toFixed(2),
-                    " tree per square pixel x 1000. Current recommended dispersion is ",
+                    this._formatDensity(),
+                    " tree per square pixel x 1000. Assumed dispersion is ",
                     this._dispersion().toFixed(2),
                     " pixels.")),
             React.createElement(react_bootstrap_1.FormGroup, { validationState: this._validate(EnumValidationContext.CanvasWidth) },
@@ -64618,6 +64629,15 @@ var _ = __webpack_require__(43);
 var AuxCalculations = /** @class */ (function () {
     function AuxCalculations() {
         var _this = this;
+        /**
+         * Wrapper around lodash _.inRange()
+         * Differences:
+         * 1) accepts an array of numbers as the range
+         * 2) upper range value is checked inclusive
+         */
+        this.inRange = function (value, range) {
+            return value == range[1] || _.inRange(value, range[0], range[1]);
+        };
         this.getArea = function (canvasWidth, canvasHeight, spriteColumnWidth, spriteRowHeight) {
             return (_.max([canvasWidth, spriteColumnWidth]) - spriteColumnWidth) *
                 (_.max([canvasHeight, spriteRowHeight]) - spriteRowHeight);
@@ -64631,10 +64651,11 @@ var AuxCalculations = /** @class */ (function () {
         };
         this.getRecommendedNumberOfTress = function (currentNumberOfTrees, area, treeDensityRange) {
             var currentDensity = _this.getTreesDensity(area, currentNumberOfTrees);
-            if (_.inRange(currentDensity, treeDensityRange[0], treeDensityRange[1]))
+            if (exports.auxCalculations.inRange(currentDensity, treeDensityRange))
                 return currentNumberOfTrees;
-            var recalculatedDensity = currentDensity < treeDensityRange[0] ? treeDensityRange[0] : treeDensityRange[1];
-            return _.floor((recalculatedDensity * area) / 1000);
+            return currentDensity < treeDensityRange[0] ?
+                _.ceil(treeDensityRange[0] * area / 1000) :
+                _.floor(treeDensityRange[1] * area / 1000);
         };
         /**
          * Provided trees were planted uniformly in a square grid,

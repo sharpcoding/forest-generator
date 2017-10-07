@@ -59,15 +59,26 @@ export class GenerationParametersControl extends React.Component<IGenerationPara
     this.state.numberOfTrees, 
     this._area(), 
     this.props.config.image.treeDensityRange)
+  private _formatDensity = (): string => {
+    let densityRounded = _.floor(this._density()*100)/100
+    let result = `${densityRounded}`
+    if (!auxCalculations.inRange(this._density(), this.props.config.image.treeDensityRange) &&
+        auxCalculations.inRange(densityRounded, this.props.config.image.treeDensityRange)) {
+      result = this._density() < this.props.config.image.treeDensityRange[0] ? 
+        `slightly below ${this.props.config.image.treeDensityRange[0]}` :
+        `slightly above ${this.props.config.image.treeDensityRange[1]}`
+    }
+    return result;
+  }
 
   private _validate = (context: EnumValidationContext): ("success" | "error") => {
     let result = true;
     result = result && (((context == EnumValidationContext.All) || (context == EnumValidationContext.NumberOfTrees)) ? 
-      _.inRange(this._density(), this.props.config.image.treeDensityRange[0], this.props.config.image.treeDensityRange[1]+0.001) : true);
+      auxCalculations.inRange(this._density(), this.props.config.image.treeDensityRange) : true);
     result = result && (((context == EnumValidationContext.All) || (context == EnumValidationContext.CanvasWidth)) ? 
-      _.inRange(this.state.imageWidth, this.props.config.image.widthRange[0], this.props.config.image.widthRange[1]+1) : true);
+      auxCalculations.inRange(this.state.imageWidth, this.props.config.image.widthRange) : true);
     result = result && (((context == EnumValidationContext.All) || (context == EnumValidationContext.CanvasHeight)) ? 
-      _.inRange(this.state.imageHeight, this.props.config.image.heightRange[0], this.props.config.image.heightRange[1]+1) : true);
+      auxCalculations.inRange(this.state.imageHeight, this.props.config.image.heightRange) : true);
     return result ? "success" : "error";
   }
 
@@ -97,8 +108,8 @@ export class GenerationParametersControl extends React.Component<IGenerationPara
         <FormControl.Feedback />
         <HelpBlock>Please enter a value so that the tree density is from {this.props.config.image.treeDensityRange[0]} to {this.props.config.image.treeDensityRange[1]}</HelpBlock>
         <ControlLabel>
-          Presented density is {this._density().toFixed(2)} tree per square pixel x 1000.
-          Current recommended dispersion is {this._dispersion().toFixed(2)} pixels.
+          Presented density is {this._formatDensity()} tree per square pixel x 1000.
+          Assumed dispersion is {this._dispersion().toFixed(2)} pixels.
         </ControlLabel>
       </FormGroup>
       <FormGroup validationState={this._validate(EnumValidationContext.CanvasWidth)}>
