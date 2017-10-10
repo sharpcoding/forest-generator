@@ -1,4 +1,4 @@
-import 'react-toastify/dist/ReactToastify.min.css';
+import '../css/react-toastify/ReactToastify.min.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { connect, Provider } from 'react-redux';
