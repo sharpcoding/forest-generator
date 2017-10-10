@@ -13,14 +13,13 @@
     "css-loader": "^0.28.4",
     "date-fns": "^1.28.5",
     "es6-promise": "^4.1.1",
-    "immutable": "^3.8.1",
     "json-object-mapper": "^1.5.1",
-    "konva": "^1.6.8",
     "lodash": "^4.17.4",
     "react": "^15.5.4",
     "react-bootstrap": "^0.31.3",
     "react-dom": "^15.5.4",
     "react-redux": "^5.0.5",
+    "react-toastify": "^2.1.0",
     "redux": "^3.7.0",
     "redux-actions": "^2.2.1",
     "redux-thunk": "^2.2.0",
@@ -38,6 +37,7 @@
     "open": "0.0.5",
     "ts-loader": "^2.3.5",
     "typescript": "^2.3.4",
-    "webpack": "^2.6.1"
+    "webpack": "^2.6.1",
+    "worker-loader": "^1.0.0"
   }
 }

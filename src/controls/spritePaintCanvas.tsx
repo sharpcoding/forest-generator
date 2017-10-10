@@ -106,4 +106,3 @@ function matchDispatchToProps(dispatch: Dispatch<{}>) {
 }
 
 export default connect<ISpritePaintCanvasControlProps, IImageControlActionCreators, ISpritePaintCanvasControlOwnProps>(mapStateToProps, matchDispatchToProps)(SpritePaintCanvasControl);
-

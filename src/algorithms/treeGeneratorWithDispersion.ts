@@ -4,7 +4,7 @@ import { IGenerationParameters } from "../state/generationParameters/index";
 import { ITree } from "../state/forest/tree";
 
 class TreeGeneratorWithDispersion implements IGenerator {
-  generate(params: IGenerationParameters): ITree[] {
+  generate(params: IGenerationParameters, reportProgress: (trees: ITree[]) => void): ITree[] {
     let result: ITree[] = [];
     let numberOfTries = 0;
     for (let i = 0; i < params.numberOfTrees; i++) {
@@ -31,6 +31,8 @@ class TreeGeneratorWithDispersion implements IGenerator {
           numberOfTries = 0;
         }
       }
+      if ((_.isFunction(reportProgress)) && (i % 1000 == 0))
+        reportProgress(result);
       result.push(_.extend(tree, <ITree> {
         x: tree.canvasImageX + params.sprite.columnWidth/2,
         y: tree.canvasImageY + params.sprite.rowHeight/2

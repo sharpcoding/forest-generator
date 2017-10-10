@@ -1,3 +1,4 @@
+import 'react-toastify/dist/ReactToastify.min.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { connect, Provider } from 'react-redux';
@@ -9,13 +10,16 @@ import { actions } from "./actions/index";
 import { configReducer } from './reducers/config';
 import { generationParametersReducer } from './reducers/generationParameters';
 import { forestReducer } from './reducers/forest';
+import { notificationsReducer } from './reducers/notifications';
+import Toaster from './controls/toaster';
 import SpritePaintCanvasControl from './controls/spritePaintCanvas';
 import GenerationParametersControl from './controls/generationParameters';
 
 const combinedReducers = combineReducers<IState>({
   config: configReducer,
   generationParameters: generationParametersReducer,
-  forest: forestReducer
+  forest: forestReducer,
+  notifications: notificationsReducer
 });
 
 //this is the callback function required in order to have Redux DevTools extension https://github.com/zalmoxisus/redux-devtools-extension working
@@ -25,6 +29,7 @@ const store: Store<any> = createStore(combinedReducers, composeEnhancers(), appl
 ReactDOM.render(
   <Provider store={store}>
     <span>
+      <Toaster />
       <GenerationParametersControl />
       <br />
       <SpritePaintCanvasControl />

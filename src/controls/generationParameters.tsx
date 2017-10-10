@@ -11,6 +11,7 @@ import { IGenerationParameters } from "../state/generationParameters";
 import { IState } from "../state/index";
 import { actions } from "../actions/index";
 import { auxCalculations } from "../algorithms/auxCalculations";
+import { asyncActionTriggers } from "../actions/asyncTriggers";
 
 enum EnumValidationContext {
   All,
@@ -34,8 +35,8 @@ export interface IGenerationParametersControlState {
 }
 
 export interface IGenerationParametersActionCreators extends ActionCreatorsMapObject {
-  generateForest: (value: IGenerationParameters) => void;
   generationParametersChanged: (value: IGenerationParameters) => void;
+  startForestGeneration: (value: IGenerationParameters) => (dispatch) => void;
 }
 
 export class GenerationParametersControl extends React.Component<IGenerationParametersControlProps & IGenerationParametersActionCreators, IGenerationParametersControlState> {
@@ -168,7 +169,7 @@ export class GenerationParametersControl extends React.Component<IGenerationPara
       <FormGroup>
         <Button
           disabled={!this._isValid(EnumValidationContext.All)}
-          onClick={() => this.props.generateForest(this.props.parameters)}>Generate Forest</Button>
+          onClick={() => this.props.startForestGeneration(this.props.parameters)}>Generate Forest</Button>
       </FormGroup>
     </Form>)
   }
@@ -177,14 +178,14 @@ export class GenerationParametersControl extends React.Component<IGenerationPara
 function mapStateToProps(state: IState): IGenerationParametersControlProps {
   return {
     config: state.config,
-    parameters: state.generationParameters
+    parameters: state.generationParameters,
   };
 }
 
 function matchDispatchToProps(dispatch: Dispatch<{}>) {
   return bindActionCreators<IGenerationParametersActionCreators>({
-    generateForest: actions.generateForest,
-    generationParametersChanged: actions.generationParametersChanged
+    generationParametersChanged: actions.generationParametersChanged,
+    startForestGeneration: asyncActionTriggers.startForestGeneration
   }, dispatch);
 }
 
