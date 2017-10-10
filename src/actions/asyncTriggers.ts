@@ -5,7 +5,7 @@ import { actions } from "./index";
 import { IConfig } from "../state/config/index";
 import { IGenerationParameters } from "../state/generationParameters";
 import { ITreeGenerationWorker, ITreeGenerationWorkerOutputMessageEvent, ITreeGenerationWorkerInputMessageEvent } from "../workers/treeGenerator";
-import * as TreeGeneratorWorker from "worker-loader!../../dist/treeGeneration.worker.js";
+import * as TreeGeneratorWorker from "worker-loader?name=treeGenerator.worker.js!../../dist/treeGenerator.worker.js";
 
 const treeGeneratorWorker: ITreeGenerationWorker = new TreeGeneratorWorker();
 
