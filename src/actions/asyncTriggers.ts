@@ -19,6 +19,7 @@ export const asyncActionTriggers = {
       });
   },
   startForestGeneration: (params: IGenerationParameters) => (dispatch) => {
+    dispatch(actions.generationParametersChanged(params));
     dispatch(actions.forestGenerationStarted);
     treeGeneratorWorker.postMessage({ generationParameters: params });
     treeGeneratorWorker.addEventListener("message", (message: ITreeGenerationWorkerOutputMessageEvent) => {

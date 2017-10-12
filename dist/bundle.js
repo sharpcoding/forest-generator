@@ -28714,6 +28714,7 @@ exports.asyncActionTriggers = {
         });
     }; },
     startForestGeneration: function (params) { return function (dispatch) {
+        dispatch(index_1.actions.generationParametersChanged(params));
         dispatch(index_1.actions.forestGenerationStarted);
         treeGeneratorWorker.postMessage({ generationParameters: params });
         treeGeneratorWorker.addEventListener("message", function (message) {
@@ -38218,13 +38219,7 @@ var GenerationParametersControl = /** @class */ (function (_super) {
         return (React.createElement(react_bootstrap_1.Form, null,
             React.createElement(react_bootstrap_1.FormGroup, { validationState: this._validate(EnumValidationContext.NumberOfTrees) },
                 React.createElement(react_bootstrap_1.ControlLabel, null, "Number of trees"),
-                React.createElement("input", { className: "form-control", type: "number", value: this.state.numberOfTrees, onChange: function (event) { return _this.setState({ numberOfTrees: event.currentTarget.valueAsNumber }); }, onBlur: function (event) {
-                        _this._isValid(EnumValidationContext.NumberOfTrees) ?
-                            _this.props.generationParametersChanged(_.extend({}, _this.props.parameters, {
-                                numberOfTrees: _this.state.numberOfTrees,
-                                dispersion: _this._dispersion()
-                            })) : null;
-                    } }),
+                React.createElement("input", { className: "form-control", type: "number", value: this.state.numberOfTrees, onChange: function (event) { return _this.setState({ numberOfTrees: event.currentTarget.valueAsNumber }); } }),
                 React.createElement(react_bootstrap_1.FormControl.Feedback, null),
                 React.createElement(react_bootstrap_1.HelpBlock, null,
                     "Please enter a value so that the tree density is from ",
@@ -38247,13 +38242,6 @@ var GenerationParametersControl = /** @class */ (function (_super) {
                                 numberOfTrees: _this._recommendedNumberOfTrees()
                             }));
                         });
-                    }, onBlur: function (event) {
-                        _this._isValid(EnumValidationContext.CanvasWidth) ?
-                            _this.props.generationParametersChanged(_.extend({}, _this.props.parameters, {
-                                imageWidth: _this.state.imageWidth,
-                                numberOfTrees: _this.state.numberOfTrees,
-                                dispersion: _this._dispersion()
-                            })) : null;
                     } }),
                 React.createElement(react_bootstrap_1.FormControl.Feedback, null),
                 React.createElement(react_bootstrap_1.HelpBlock, null,
@@ -38271,13 +38259,6 @@ var GenerationParametersControl = /** @class */ (function (_super) {
                                 numberOfTrees: _this._recommendedNumberOfTrees()
                             }));
                         });
-                    }, onBlur: function (event) {
-                        _this._isValid(EnumValidationContext.CanvasHeight) ?
-                            _this.props.generationParametersChanged(_.extend({}, _this.props.parameters, {
-                                dispersion: _this._dispersion(),
-                                numberOfTrees: _this.state.numberOfTrees,
-                                imageHeight: _this.state.imageHeight,
-                            })) : null;
                     } }),
                 React.createElement(react_bootstrap_1.FormControl.Feedback, null),
                 React.createElement(react_bootstrap_1.HelpBlock, null,
@@ -38286,7 +38267,16 @@ var GenerationParametersControl = /** @class */ (function (_super) {
                     " and ",
                     this.props.config.image.heightRange[1])),
             React.createElement(react_bootstrap_1.FormGroup, null,
-                React.createElement(react_bootstrap_1.Button, { disabled: !this._isValid(EnumValidationContext.All), onClick: function () { return _this.props.startForestGeneration(_this.props.parameters); } }, "Generate Forest"))));
+                React.createElement(react_bootstrap_1.ButtonToolbar, null,
+                    React.createElement(react_bootstrap_1.Button, { disabled: !this._isValid(EnumValidationContext.All), onClick: function () {
+                            var newParameters = _.extend({}, _this.props.parameters, {
+                                numberOfTrees: _this.state.numberOfTrees,
+                                imageWidth: _this.state.imageWidth,
+                                imageHeight: _this.state.imageHeight,
+                                dispersion: _this._dispersion()
+                            });
+                            _this.props.startForestGeneration(newParameters);
+                        } }, "Generate Forest")))));
     };
     return GenerationParametersControl;
 }(React.Component));
@@ -68864,7 +68854,7 @@ function isReactComponent(component) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = function() {
-	return new Worker("/forest-generator/" + __webpack_require__.p + "treeGenerator.worker.js");
+	return new Worker(__webpack_require__.p + "treeGenerator.worker.js");
 };
 
 /***/ })

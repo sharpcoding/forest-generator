@@ -97,14 +97,6 @@ export class GenerationParametersControl extends React.Component<IGenerationPara
             type="number"
             value={this.state.numberOfTrees}
             onChange={(event) => this.setState({ numberOfTrees: event.currentTarget.valueAsNumber })}
-            onBlur={(event) => {
-              this._isValid(EnumValidationContext.NumberOfTrees) ? 
-                this.props.generationParametersChanged(_.extend<IGenerationParameters, Object, IGenerationParameters>({}, this.props.parameters, {
-                    numberOfTrees: this.state.numberOfTrees,
-                    dispersion: this._dispersion() 
-                  })) : null 
-              }
-            }
           />
         <FormControl.Feedback />
         <HelpBlock>Please enter a value so that the tree density is from {this.props.config.image.treeDensityRange[0]} to {this.props.config.image.treeDensityRange[1]}</HelpBlock>
@@ -127,14 +119,6 @@ export class GenerationParametersControl extends React.Component<IGenerationPara
               }));
             });
           }}
-          onBlur={(event) => { 
-            this._isValid(EnumValidationContext.CanvasWidth) ? 
-              this.props.generationParametersChanged(_.extend<IGenerationParameters, Object, IGenerationParameters>({}, this.props.parameters, { 
-                imageWidth: this.state.imageWidth,
-                numberOfTrees: this.state.numberOfTrees,
-                dispersion: this._dispersion()})) : null 
-            }
-          }
         />
         <FormControl.Feedback />
         <HelpBlock>Please enter a value between {this.props.config.image.widthRange[0]} and {this.props.config.image.widthRange[1]}</HelpBlock>
@@ -153,23 +137,24 @@ export class GenerationParametersControl extends React.Component<IGenerationPara
               }));
             });
           }}
-          onBlur={(event) => {
-            this._isValid(EnumValidationContext.CanvasHeight) ? 
-              this.props.generationParametersChanged(_.extend<IGenerationParameters, Object, IGenerationParameters>({}, this.props.parameters, {
-                  dispersion: this._dispersion(),
-                  numberOfTrees: this.state.numberOfTrees,
-                  imageHeight: this.state.imageHeight,
-                })) : null
-            } 
-          }
         />
         <FormControl.Feedback />
         <HelpBlock>Please enter a value between {this.props.config.image.heightRange[0]} and {this.props.config.image.heightRange[1]}</HelpBlock>
       </FormGroup>
       <FormGroup>
-        <Button
-          disabled={!this._isValid(EnumValidationContext.All)}
-          onClick={() => this.props.startForestGeneration(this.props.parameters)}>Generate Forest</Button>
+        <ButtonToolbar>
+          <Button
+            disabled={!this._isValid(EnumValidationContext.All)}
+            onClick={() => {
+              let newParameters = _.extend<IGenerationParameters, Object, IGenerationParameters>({}, this.props.parameters, {
+                numberOfTrees: this.state.numberOfTrees,
+                imageWidth: this.state.imageWidth,
+                imageHeight: this.state.imageHeight,
+                dispersion: this._dispersion()
+              });
+              this.props.startForestGeneration(newParameters)}
+            }>Generate Forest</Button>
+        </ButtonToolbar>
       </FormGroup>
     </Form>)
   }
