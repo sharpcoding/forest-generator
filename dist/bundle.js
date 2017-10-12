@@ -68854,7 +68854,7 @@ function isReactComponent(component) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = function() {
-	return new Worker("forest-generator" + __webpack_require__.p + "treeGenerator.worker.js");
+	return new Worker("https://sharpcoding.github.io/forest-generator/dist/treeGenerator.worker.js");
 };
 
 /***/ })
