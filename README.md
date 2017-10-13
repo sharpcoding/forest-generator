@@ -18,7 +18,7 @@ or this:
 
 ![Forest #3](img/examples/example-forest-3.png)
 
-completely randomly.
+randomly.
 
 This is (still) not a real product, but hobby/demo project, written in TypeScript, applying together the following frameworks and technologies:
 * React
