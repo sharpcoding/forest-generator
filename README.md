@@ -2,7 +2,25 @@
 
 Generate your ideal forest image based on the sprite(s) provided.
 
-This is a hobby/demo project, written completely in TypeScript, applying the following frameworks and technologies:
+In other words, just provide means to transform this:
+
+![Sprite](img/examples/trees-sprite.png)
+
+into this:
+
+![Forest #1](img/examples/example-forest-1.png)
+
+or this:
+
+![Forest #2](img/examples/example-forest-2.png)
+
+or this:
+
+![Forest #3](img/examples/example-forest-3.png)
+
+completely randomly.
+
+This is (still) not a real product, but hobby/demo project, written in TypeScript, applying together the following frameworks and technologies:
 * React
 * Redux
 * Webpack
