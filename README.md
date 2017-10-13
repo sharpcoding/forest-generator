@@ -14,9 +14,9 @@ or this:
 
 ![Forest #2](img/examples/example-forest-2.png)
 
-or this:
+or even in such crazy resolution of 4000x4000 pixels with 35000 tress painted: 
 
-![Forest #3](img/examples/example-forest-3.png)
+![Forest #3](img/examples/example-forest-3.jpg)
 
 randomly.
 
