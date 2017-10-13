@@ -7,8 +7,8 @@
     "rowHeight": 100
   },
   "image": {
-    "widthRange": [100, 5000],
-    "heightRange": [100, 5000],
+    "widthRange": [120, 5000],
+    "heightRange": [120, 5000],
     "treeDensityRange": [0.8, 3]
   }
 }
