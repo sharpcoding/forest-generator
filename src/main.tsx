@@ -13,7 +13,7 @@ import { forestReducer } from './reducers/forest';
 import { notificationsReducer } from './reducers/notifications';
 import Toaster from './controls/toaster';
 import SpritePaintCanvasControl from './controls/spritePaintCanvas';
-import GenerationParametersControl from './controls/generationParameters';
+import SettingsActionsControl from './controls/settingsActions';
 
 const combinedReducers = combineReducers<IState>({
   config: configReducer,
@@ -30,7 +30,7 @@ ReactDOM.render(
   <Provider store={store}>
     <span>
       <Toaster />
-      <GenerationParametersControl />
+      <SettingsActionsControl />
       <br />
       <SpritePaintCanvasControl />
     </span>
