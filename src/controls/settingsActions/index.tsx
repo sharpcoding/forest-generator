@@ -12,6 +12,7 @@ import { IState } from "../../state";
 import { actions } from "../../actions";
 import { calculations, EnumValidationContext } from "./calculations";
 import { asyncActionTriggers } from "../../actions/asyncTriggers";
+import { EnumImageDownloadingStatus } from "../../state/notifications/index";
 
 export interface ISettingsActionsControlOwnProps {
 }
@@ -29,6 +30,7 @@ export interface ISettingsActionsControlState {
 
 export interface IGenerationParametersActionCreators extends ActionCreatorsMapObject {
   generationParametersChanged: (value: IGenerationParameters) => void;
+  imageDownloadStatusChange: (value: EnumImageDownloadingStatus) => void;
   startForestGeneration: (value: IGenerationParameters) => (dispatch) => void;
 }
 
@@ -117,6 +119,11 @@ export class SettingsActionsControl extends React.Component<ISettingsActionsCont
               });
               this.props.startForestGeneration(newParameters)}
             }>Generate Forest</Button>
+          <Button
+            disabled={!calculations.isValid(EnumValidationContext.All)}
+            onClick={() => {
+              this.props.imageDownloadStatusChange(EnumImageDownloadingStatus.Requested);
+            }}>Download as png</Button>
         </ButtonToolbar>
       </FormGroup>
     </Form>)
@@ -133,6 +140,7 @@ function mapStateToProps(state: IState): ISettingsActionsControlProps {
 function matchDispatchToProps(dispatch: Dispatch<{}>) {
   return bindActionCreators<IGenerationParametersActionCreators>({
     generationParametersChanged: actions.generationParametersChanged,
+    imageDownloadStatusChange: actions.imageDownloadStatusChange,
     startForestGeneration: asyncActionTriggers.startForestGeneration
   }, dispatch);
 }

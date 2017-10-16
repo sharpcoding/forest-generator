@@ -6,6 +6,7 @@ import { ISprite } from "../state/config/sprite";
 import { IForest } from "../state/forest";
 import { ITree } from "../state/forest/tree";
 import { IGenerationParameters } from "../state/generationParameters";
+import { EnumImageDownloadingStatus } from "../state/notifications/index";
 
 export const actions = {
   configLoadedSuccessfully: createAction<IConfig, Object>(
@@ -20,5 +21,12 @@ export const actions = {
     (payload: ITree[]) => payload),
   forestGenerationFinished: createAction<ITree[], ITree[]>(
     actionLabels.FOREST_GENERATION_FINISHED,
-    (payload: ITree[]) => payload)
+    (payload: ITree[]) => payload),
+  /**
+   * Request to change the dowload status in system
+   */
+  imageDownloadStatusChange: createAction<EnumImageDownloadingStatus, EnumImageDownloadingStatus>(
+    actionLabels.IMAGE_DOWNLOAD_STATUS_CHANGE,
+    (payload: EnumImageDownloadingStatus) => payload
+  )
 }

@@ -1,7 +1,12 @@
-export enum EnumForestGeneratingState {
+export enum EnumForestGeneratingStatus {
   Initial,
   IsGenerating,
   Generated
+}
+
+export enum EnumImageDownloadingStatus {
+  NotRequested,
+  Requested
 }
 
 /**
@@ -9,5 +14,6 @@ export enum EnumForestGeneratingState {
  * "toastified" notifications to the user
  */
 export interface INotifications {
-  readonly forestGeneratingState: EnumForestGeneratingState;
+  readonly forestGeneratingStatus: EnumForestGeneratingStatus;
+  readonly imageDownloadingStatus: EnumImageDownloadingStatus;
 }

@@ -55,9 +55,9 @@ the algorithm will very easily distribute trees with recommended dispersion of 1
 Priority list from the highest to the lowest:
 
 Version 0.5
+- [x] Download rendered PNG button
 - [ ] Add Stop render button 
 - [ ] Add current render % complete span/div 
-- [ ] Download rendered PNG button
 - [ ] Pattern rendering
 
 Further development:
