@@ -42,13 +42,15 @@ All these restrictions can be configured in the [config file](/src/config.json).
 
 ## Dispersion
 
-[The algorithm](src/algorithms/treeGeneratorWithDispersion.ts) for rendering tries its best to place trees randomly, but not "too randomly": there a parameter of *dispersion*. 
+[The algorithm](src/algorithms/treeGeneratorWithDispersion.ts) for rendering tries its best to place trees randomly, but not "too randomly", introducing a parameter of *dispersion*.
 
-Dispersion - and more precisely - the *recommended* dispersion - is just a plain number (of pixels), meaning a desired distance between trees when placed uniformly on canvas. So for a canvas:
+Dispersion - and more precisely - the *recommended* dispersion - is just a plain number (of pixels), representing a desired distance between every two trees when placed uniformly on canvas. So for a canvas:
 * of 500 pixels wide
 * of 500 pixels high
 * having 250 trees
-the algorithm will very easily distribute trees with recommended dispersion of 10 pixels. However, it is not possible to place 25 trees on such a canvas with dispersion of, say, 20 pixels, so algorithm will try to (temporarily) decrease the dispersion (for a tree) and make a random placement. It is inefficient and cpu-intensive operation, so this is why the [Web Worker](src/algorithms/treeGeneratorWithDispersion.ts) got applied. But remember, it is just for fun and demo purposes !
+the algorithm will very easily distribute trees with the recommended dispersion of 10 pixels. However, it is not possible to place 250 trees on such a canvas with dispersion of, say, 20 pixels. In case of dispersion being too high, algorithm will try to (temporarily) decrease it (for a tree and make a placement). It is inefficient and cpu-intensive operation, so this is why the [Web Worker](src/algorithms/treeGeneratorWithDispersion.ts) got applied. 
+
+Disclaimer: the "place randomly with dispersion" algorithm is slow/inefficient by design, since it is provided just for fun/demo purposes !
 
 ## Planned development
 
@@ -56,9 +58,9 @@ Priority list from the highest to the lowest:
 
 Version 0.5
 - [x] Download rendered PNG button
+- [ ] Pattern rendering
 - [ ] Add Stop render button 
 - [ ] Add current render % complete span/div 
-- [ ] Pattern rendering
 
 Further development:
 - [ ] Config screen for [config.json](src/config.json) settings.
@@ -75,13 +77,18 @@ npm install -g local-web-server
 npm install
 ```
 
-## Running
+## Running development version
 
+Running on Windows:
 ```
-npm run start
+npm run start-w
+```
+Running on Linux/OSX:
+```
+npm run start-x
 ```
 
-Remark: HTML5 Canvas proved to cause refresh problems when working with the webpack-dev-server hot reloading, so every time the *start* command executes, a new [bundle.js](/dist/bundle.js) is regenerated and a local web server started. This web server start can be avoided by just recompiling the source
+Remark: HTML5 Canvas proved to cause refresh problems when working with the webpack-dev-server hot reloading, so every time the *start* command executes, a new [bundle.js](/dist/bundle.js) is regenerated and a local web server started. This web server start can be avoided by just recompiling the source:
 
 ```
 npm run recompile

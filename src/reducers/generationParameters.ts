@@ -17,9 +17,9 @@ export const generationParametersReducer = handleActions<IGenerationParameters, 
     return _.extend({}, state, <IGenerationParameters> action.payload)
   }
  }, <IGenerationParameters> {
-   numberOfTrees: 315,
-   imageWidth: 500,
-   imageHeight: 500,
+   numberOfTrees: 4000,
+   imageWidth: 1500,
+   imageHeight: 1500,
    dispersion: 20,
    sprite: {}
   }
