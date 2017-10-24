@@ -14,7 +14,8 @@ or this:
 
 ![Forest #2](img/examples/example-forest-2.png)
 
-or even in such crazy resolution of 4000x4000 pixels with 35000 tress painted: 
+or even into the image of such a crazy resolution as 4000x4000 pixels with 35000 tress painted on it: 
+
 
 ![Forest #3](img/examples/example-forest-3.jpg)
 
@@ -42,15 +43,20 @@ All these restrictions can be configured in the [config file](/src/config.json).
 
 ## Dispersion
 
-[The algorithm](src/algorithms/treeGeneratorWithDispersion.ts) for rendering tries its best to place trees randomly, but not "too randomly", introducing a parameter of *dispersion*.
+[The algorithm](src/algorithms/treeGeneratorWithDispersion.ts) for rendering tries its best to place trees randomly, but not "too randomly". Thus a parameter of *dispersion* was introduced.
 
-Dispersion - and more precisely - the *recommended* dispersion - is just a plain number (of pixels), representing a desired distance between every two trees when placed uniformly on canvas. So for a canvas:
+Dispersion - and more precisely - the *recommended* dispersion - is just a plain number (of pixels), representing a desired distance between:
+* a given tree,
+* the closest of any other (rendered) trees.
+
+So for a canvas:
 * of 500 pixels wide
 * of 500 pixels high
 * having 250 trees
+
 the algorithm will very easily distribute trees with the recommended dispersion of 10 pixels. However, it is not possible to place 250 trees on such a canvas with dispersion of, say, 20 pixels. In case of dispersion being too high, algorithm will try to (temporarily) decrease it (for a tree and make a placement). It is inefficient and cpu-intensive operation, so this is why the [Web Worker](src/algorithms/treeGeneratorWithDispersion.ts) got applied. 
 
-Disclaimer: the "place randomly with dispersion" algorithm is slow/inefficient by design, since it is provided just for fun/demo purposes !
+Disclaimer: the "place randomly with dispersion" algorithm is slow/inefficient by design, since it is provided just for fun/demo purposes (to demonstrate a Web Worker behind the scenes) !
 
 ## Planned development
 
