@@ -24,7 +24,7 @@ randomly.
 This is (still) not a real product, but hobby/demo project, written in TypeScript, applying together the following frameworks and technologies:
 * React
 * Redux
-* Webpack
+* Webpack (outline of working configaration for React/Redux)
 * Web Workers
 * Bootstrap
 * HTML5 Canvas
